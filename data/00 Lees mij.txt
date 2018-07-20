@@ -1,0 +1,34 @@
+Bestanden:
+
+Inwonersaantallen.csv   CBS inwonersaantallen in 100m2 raster
+6MM-GRENS-CBS.csv       CBS provincie-, gemeente- en wijkinformatie in 100m2 raster (berekend uit polygon bestanden)
+
+NRK-AED-lokaties.csv    Lijst met gemelde AED lokaties (vertrouwelijk)
+HSN-AED-lokaties.csv    Lijst met geregistreerde AED lokaties (vertrouwelijk)
+
+Provinciegrenzen.csv    Geografische informatie over provinciegrenzen in polygonen (optioneel)
+Gemeentegrenzen.csv     Geografische informatie over gemeentegrenzen in polygonen (optioneel)
+Buurtgrenzen.csv        Geografische informatie over buurtgrenzen in polygonen (optioneel)
+Wijkgrenzen.csv         Geografische informatie over wijkgrenzen in polygonen (optioneel)
+
+
+Bronnen:
+
+1) Inwonersaantallen in 100m2 raster
+https://www.cbs.nl/nl-nl/dossier/nederland-regionaal/geografische%20data/kaart-van-100-meter-bij-100-meter-met-statistieken
+https://www.cbs.nl/-/media/_pdf/2017/48/statistische%20gegevens%20per%20vierkant%20en%20postcode%20november%202017.pdf
+http://download.cbs.nl/regionale-kaarten/2017-CBSvierkant100m_2017v1.zip
+CBSvierkant100m_2017_v1.dbf kan met Excel geconverteerd worden naar met lijstscheidingstekens gescheiden .CSV bestand. 
+
+2) Geografische informatie over provinciegrenzen
+http://www.imergis.nl/asp/47.asp
+http://www.imergis.nl/shp/2018-Imergis_provinciegrenzen_kustlijn-shp.zip
+ESRI Shapefile bestanden uit provinciegrenzen.zip kunnen met FME desktop geconverteerd worden naar "Well-known text" .CSV bestanden.
+https://www.safe.com/fme/fme-desktop/trial-download/
+
+3) Geografische informatie over gemeente-, wijk- en buurtgrenzen
+https://www.cbs.nl/nl-nl/dossier/nederland-regionaal/geografische%20data/wijk-en-buurtkaart-2017
+https://www.cbs.nl/-/media/_pdf/2017/36/2017ep37%20toelichting%20wijk%20en%20buurtkaart%202017.pdf
+https://www.cbs.nl/-/media/_pdf/2017/36/buurt_2017.zip
+ESRI Shapefile bestanden uit buurt_2017.zip kunnen met FME desktop geconverteerd worden naar "Well-known text" .CSV bestanden.
+https://www.safe.com/fme/fme-desktop/trial-download/

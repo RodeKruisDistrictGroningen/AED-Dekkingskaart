@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>AED-Dekkingskaart</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="js/RDNaarLocatieScript.js"></script>
+    <script src="js/pointInPolygon.js" charset="utf-8"></script>
+    <script src="js/calcPolygonArray.js" charset="utf-8"></script>
+    <script src="js/papaparse.min.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/generateHV.js"></script>
+    <script src="js/generateCBSGrens.js"></script>
+    <script src="js/generateCustomZone.js"></script>
+    <script src="js/generateGeoJson.js"></script>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="css/css.css">
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+            integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"
+            integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
+            crossorigin="anonymous"></script>
+</head>
+<body>
+<div class="d-flex flex-column justify-content-between fullHeight">
+    <header>
+        <nav class="navbar navbar-expand flex-column flex-md-row bd-navbar navbar-light bg-light">
+            <a class="navbar-brand"><img src="img/rk-logo.be24a95c.svg" alt="Rode Kruis - EHBO" width="100" height="40"></a>
+            <div class="mx-auto"><p id="title" class="text-monospace">AED-Dekkingskaart District Groningen</p></div>
+        </nav>
+    </header>
+    <div id="map-canvas" class="align-self-stretch"></div>
+    <div id="drop-container">
+        <div id="drop-silhouette"></div>
+    </div>
+    <footer>
+        <nav class="navbar navbar-expand-md bd-navbar navbar-light bg-light">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02"
+                    aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+                <div class="navbar-nav ml-auto">
+                    <div class="nav-item">
+                        <a class="nav-link" href="#" data-toggle="modal"
+                           data-target="#informatieModalCenter">Informatie</a>
+                        <!-- Modal -->
+                        <div class="modal fade" id="informatieModalCenter" tabindex="-1" role="dialog"
+                             aria-labelledby="informatieModalCenterTitle" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="informatieModalLongTitle">Informatie</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        ...
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="nav-item">
+                        <a class="nav-link" href="#" data-toggle="modal" data-target="#PrivacyModalCenter">Privacy</a>
+                        <!-- Modal -->
+                        <div class="modal fade" id="PrivacyModalCenter" tabindex="-1" role="dialog"
+                             aria-labelledby="PrivacyModalCenterTitle" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="PrivacyModalLongTitle">Privacy</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        ...
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="nav-item">
+                        <a class="nav-link" href="#" data-toggle="modal" data-target="#ContactModalCenter">Contact</a>
+                        <!-- Modal -->
+                        <div class="modal fade" id="ContactModalCenter" tabindex="-1" role="dialog"
+                             aria-labelledby="ContactModalCenterTitle" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="ContactModalLongTitle">Contact</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        ...
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </footer>
+</div>
+</body>
+<script>
+    function loadJsonOnMap(json) {
+        var geojson = JSON.parse(json);
+        map.data.addGeoJson(geojson);
+    }
+
+    var center = {lat: 53.221685, lng: 6.45};
+    var map, popup, Popup;
+
+    function createLegendMapControl(map) {
+        let controlDiv = document.createElement('div');
+        // Set CSS for the control border
+        var controlUI = document.createElement('div');
+        controlUI.style.fontFamily = 'Arial, sans-serif';
+        controlUI.style.background = '#fff';
+        controlUI.style.padding = '10px';
+        controlUI.style.margin = '10px';
+        controlUI.style.border = '1px solid #000';
+
+
+        var iconBase = 'img/';
+        var icons = {
+            a: {
+                name: ' Volledige AED Dekking',
+                icon: iconBase + '228b22.png'
+            },
+            b: {
+                name: ' Gedeeltelijke AED Dekking',
+                icon: iconBase + 'ffd100.png'
+            },
+            c: {
+                name: ' Geen AED Dekking',
+                icon: iconBase + 'ff0000.png'
+            },
+            d: {
+                name: ' AED Dekking Na Succesvol Locatiebezoek',
+                icon: iconBase + '000f00.png'
+            }
+        };
+
+        for (var key in icons) {
+            var type = icons[key];
+            var name = type.name;
+            var icon = type.icon;
+            var div = document.createElement('div');
+            div.innerHTML = '<img style="width: 12px;height: 12px;" src="' + icon + '">' + name;
+            controlUI.appendChild(div);
+        }
+        controlDiv.appendChild(controlUI);
+        map.controls[google.maps.ControlPosition.TOP_RIGHT].push(controlDiv);
+    }
+
+    function createSearchboxMapControl(map) {
+        // Set CSS for the control border
+        let searchBoxControlDiv = document.createElement('input');
+        searchBoxControlDiv.className = 'form-control';
+        searchBoxControlDiv.type = 'text';
+        searchBoxControlDiv.id = 'pac-input';
+        searchBoxControlDiv.placeholder = 'Locatie zoeken...';
+
+        var searchBox = new google.maps.places.SearchBox(searchBoxControlDiv);
+        // Bias the SearchBox results towards current map's viewport.
+
+        var locationMarkers = [];
+
+        google.maps.event.addListener(searchBox, 'places_changed', function () {
+            searchBox.set('map', null);
+            var places = searchBox.getPlaces();
+            var bounds = new google.maps.LatLngBounds();
+            var i, place;
+
+            if (places.length === 0) {
+                return;
+            }
+
+            // Clear out the old locationMarkers.
+            locationMarkers.forEach(function(marker) {
+                marker.setMap(null);
+            });
+            locationMarkers = [];
+
+            for (i = 0; place = places[i]; i++) {
+                (function (place) {
+                    var icon = {
+                        url: place.icon,
+                        size: new google.maps.Size(71, 71),
+                        origin: new google.maps.Point(0, 0),
+                        anchor: new google.maps.Point(17, 34),
+                        scaledSize: new google.maps.Size(25, 25)
+                    };
+
+                    // Create a marker for each place.
+                    locationMarkers.push(new google.maps.Marker({
+                        map: map,
+                        icon: icon,
+                        title: place.name,
+                        position: place.geometry.location
+                    }));
+
+                    if (place.geometry.viewport) {
+                        // Only geocodes have viewport.
+                        bounds.union(place.geometry.viewport);
+                    } else {
+                        bounds.extend(place.geometry.location);
+                    }
+                }(place));
+            }
+            map.fitBounds(bounds);
+            searchBox.set('map', map);
+        });
+        map.controls[google.maps.ControlPosition.LEFT_TOP].push(searchBoxControlDiv);
+    }
+
+    function initMap() {
+
+        map = new google.maps.Map(document.getElementById('map-canvas'), {
+            zoom: 9,
+            center: center,
+            scaleControl: true,
+            zoomControl: true,
+            mapTypeControl: false,
+            streetViewControl: true,
+            rotateControl: true,
+            fullscreenControl: false,
+            mapTypeId: 'roadmap',
+            styles: [{
+                stylers: [{
+                    saturation: -100
+                }]
+            }]
+        });
+        map.data.setStyle(function (feature) {
+            color = feature.getProperty('fill');
+            return ({
+                fillColor: color,
+                strokeWeight: 0,
+                fillOpacity: 0.4
+            });
+        });
+
+        // Create the search box and link it to the UI element.
+        var markers = [];
+        var properties = ["Locatie", "Aantal_Reg_Aed", "Reg_Aed_Dek", "Aantal_Reg_Aed24", "Reg_Aed24_Dek", "Aantal_Meld_Aed", "Meld_Aed_Dek", "Aantal_Meld_Aed24", "Meld_Aed24_Dek", "Extra_Inw_Dek", "Aantal_Inwoners", "Provincie_Code", "Gemeente_Code", "Wijk_Code", "Buurt_Code", "PC4_Code"];
+        map.data.addListener('mouseover', function (event) {
+            var mytable = "<table class=\"table table-sm table-striped\"><thead><tr><th colspan=\"2\" style=\"text-align:center;\">" + event.feature.getProperty(properties[0]) + "</th></tr></thead>";
+            for (var i = 1; i < properties.length; i++) {
+                mytable += "<tr><td>" + properties[i] + "</td><td>" + event.feature.getProperty(properties[i]) + "</td></tr>"
+            }
+            mytable += "<tbody></tbody></table>";
+            var Ebound = event.feature.getProperty("Locatie").split("E")[1].split("N")[0];
+            var Nbound = event.feature.getProperty("Locatie").split("E")[1].split("N")[1];
+            var popupLocation = rd2Wgs(+Ebound * 100 + 50, +Nbound * 100 + 50);
+            for (var i = 0; i < markers.length; i++) {
+                markers[i].setMap(null);
+            }
+            popup = new Popup(
+                new google.maps.LatLng(parseFloat(popupLocation[0].toFixed(5)), parseFloat(popupLocation[1].toFixed(5))),
+                mytable);
+            popup.setMap(map);
+            markers.push(popup);
+        });
+
+        map.data.addListener('mouseout', function (event) {
+            for (var i = 0; i < markers.length; i++) {
+                markers[i].setMap(null);
+            }
+        });
+
+        createSearchboxMapControl(map);
+        createLegendMapControl(map);
+    }
+
+    /** Defines the Popup class. */
+    function definePopupClass() {
+
+        Popup = function (position, content) {
+            this.position = position;
+
+            contentdiv = document.createElement('div');
+            contentdiv.innerHTML = content;
+            contentdiv.classList.add('popup-bubble-content');
+
+            var pixelOffset = document.createElement('div');
+            pixelOffset.classList.add('popup-bubble-anchor');
+            pixelOffset.appendChild(contentdiv);
+
+            this.anchor = document.createElement('div');
+            this.anchor.classList.add('popup-tip-anchor');
+            this.anchor.appendChild(pixelOffset);
+
+            // Optionally stop clicks, etc., from bubbling up to the map.
+            this.stopEventPropagation();
+        };
+        // NOTE: google.maps.OverlayView is only defined once the Maps API has
+        // loaded. That is why Popup is defined inside initMap().
+        Popup.prototype = Object.create(google.maps.OverlayView.prototype);
+
+        /** Called when the popup is added to the map. */
+        Popup.prototype.onAdd = function () {
+            this.getPanes().floatPane.appendChild(this.anchor);
+        };
+
+        /** Called when the popup is removed from the map. */
+        Popup.prototype.onRemove = function () {
+            if (this.anchor.parentElement) {
+                this.anchor.parentElement.removeChild(this.anchor);
+            }
+        };
+
+        /** Called when the popup needs to draw itself. */
+        Popup.prototype.draw = function () {
+            var divPosition = this.getProjection().fromLatLngToDivPixel(this.position);
+            // Hide the popup when it is far out of view.
+            var display =
+                Math.abs(divPosition.x) < 4000 && Math.abs(divPosition.y) < 4000 ?
+                    'block' :
+                    'none';
+
+            if (display === 'block') {
+                this.anchor.style.left = divPosition.x + 'px';
+                this.anchor.style.top = divPosition.y + 'px';
+            }
+            if (this.anchor.style.display !== display) {
+                this.anchor.style.display = display;
+            }
+        };
+
+        /** Stops clicks/drags from bubbling up to the map. */
+        Popup.prototype.stopEventPropagation = function () {
+            var anchor = this.anchor;
+            anchor.style.cursor = 'auto';
+
+            ['click', 'dblclick', 'contextmenu', 'wheel', 'mousedown', 'touchstart',
+                'pointerdown']
+                .forEach(function (event) {
+                    anchor.addEventListener(event, function (e) {
+                        e.stopPropagation();
+                    });
+                });
+        };
+    }
+
+    function initEvents() {
+        // set up the drag & drop events
+        var mapContainer = document.getElementById('map-canvas');
+        var dropContainer = document.getElementById('drop-container');
+
+        // map-specific events
+        mapContainer.addEventListener('dragenter', showPanel, false);
+
+        // overlay specific events (since it only appears once drag starts)
+        dropContainer.addEventListener('dragover', showPanel, false);
+        dropContainer.addEventListener('drop', handleDrop, false);
+        dropContainer.addEventListener('dragleave', hidePanel, false);
+    }
+
+    function showPanel(e) {
+        e.stopPropagation();
+        e.preventDefault();
+        document.getElementById('drop-container').style.display = 'block';
+        return false;
+    }
+
+    function hidePanel(e) {
+        document.getElementById('drop-container').style.display = 'none';
+    }
+
+    function handleDrop(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        hidePanel(e);
+
+        var files = e.dataTransfer.files;
+        if (files.length) {
+            // process file(s) being dropped
+            for (var i = 0, file; file = files[i]; i++) {
+                sortfile(file);
+            }
+        }
+        return false;
+    }
+
+    function initialize() {
+        initMap();
+        initEvents();
+        definePopupClass();
+    }
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDblQzibWS-dOM39-_xJJBcJ22Ld9ycM1U&libraries=places&callback=initialize"
+        async defer></script>
+
+</html>
